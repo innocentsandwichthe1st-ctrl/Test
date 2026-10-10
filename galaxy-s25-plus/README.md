@@ -3,9 +3,11 @@
 A parametric model of the Samsung Galaxy S25+ to design an enclosed case around
 in Shapr3D. All dimensions live in [`params.py`](params.py), each tagged with
 where it came from: `SPEC` (Samsung's published length, width and thickness),
+`CASE` (measured from a fitted S25+ case STL built from Samsung's 3D models),
 `PHOTO` (measured from a photo of the real phone, about ±1 mm), `CALC` (worked
 out from published figures), `GUESS` (placeholder) or `MEAS` (calipers).
-Don't design the final case until the `PHOTO` and `GUESS` values are `MEAS`.
+Check the `GUESS` sizes (keys, ports, camera protrusion) with calipers before
+the final print.
 
 ## Files
 
