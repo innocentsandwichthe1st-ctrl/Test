@@ -1,6 +1,6 @@
 """Make the printable measuring sheets from params.py.
 
-    python make_print_sheets.py
+    python make_print_sheets.py [--printer-scale 0.953]
 
 Writes output/galaxy_s25plus_print_sheets.pdf:
     page 1  measurement sheet to fill in with calipers
@@ -10,8 +10,14 @@ Writes output/galaxy_s25plus_print_sheets.pdf:
 
 Pages are US Letter with everything kept inside the A4 area, so they print at
 1:1 on either. Print at 100% / "Actual size" and check the 100 mm bar.
+
+Some printers (and most phone print dialogs) shrink every page to fit and
+have no "Actual size" option. Measure the 100 mm bar on such a print and pass
+--printer-scale measured/100: the sheets are then drawn that much bigger so
+they come out at true size, in a separate PDF named after the scale.
 """
 
+import argparse
 from pathlib import Path
 
 import matplotlib
@@ -26,6 +32,7 @@ import params as p
 OUT = Path(__file__).parent / "output"
 PAGE_W, PAGE_H = 215.9, 279.4
 LINE = 0.25  # pt, thin enough to line edges up against
+printer_scale = 1.0  # what the printer does to the page; set from --printer-scale
 
 SHEET = [
     ("Body", [
@@ -63,18 +70,29 @@ SHEET = [
 ]
 
 
-def new_page(pdf_pages, title, lines):
+def new_page(pdf_pages, title, lines, one_to_one=True):
     fig = plt.figure(figsize=(PAGE_W / 25.4, PAGE_H / 25.4))
     ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_xlim(0, PAGE_W)
-    ax.set_ylim(0, PAGE_H)
+    # zoom in about the page centre so a shrinking printer brings it back to true size
+    half_w, half_h = PAGE_W / 2 * printer_scale, PAGE_H / 2 * printer_scale
+    ax.set_xlim(PAGE_W / 2 - half_w, PAGE_W / 2 + half_w)
+    ax.set_ylim(PAGE_H / 2 - half_h, PAGE_H / 2 + half_h)
     ax.set_aspect("equal")
     ax.axis("off")
     ax.text(16, 262, title, fontsize=14, weight="bold", va="top")
     for i, line in enumerate(lines):
         ax.text(16, 254 - i * 4.6, line, fontsize=8, va="top")
+    if one_to_one:
+        add_scale_note(ax, 254 - len(lines) * 4.6 - 1)
     pdf_pages.append(fig)
     return ax
+
+
+def add_scale_note(ax, y):
+    note = "CHECK FIRST: the bar at the bottom must measure 100 mm with calipers. If it doesn't, send Claude the number."
+    if printer_scale != 1:
+        note = f"Drawn for a printer that prints at {printer_scale * 100:.1f}%. The bar at the bottom must still measure 100 mm."
+    ax.text(16, y, note, fontsize=8, weight="bold", color="#c0392b", va="top")
 
 
 def scale_bar(ax, x=16, y=18):
@@ -101,7 +119,7 @@ def measurement_sheet(pages):
         "Hold the phone upright, screen facing you. Top = the selfie-camera end. Button side = the long side with the keys.",
         "\"top → ring\" = from the top edge to the NEAREST edge of the ring. Same idea for every \"→\". All values in mm.",
         "Sticks out: measure across the phone over the ring (or key), then subtract A3 (or A2). Measure twice, write both if they differ.",
-    ])
+    ], one_to_one=False)
     y = 236
     for section, rows in SHEET:
         ax.text(16, y, section, fontsize=9, weight="bold", va="center")
@@ -120,7 +138,7 @@ def measurement_sheet(pages):
 
 def corner_gauge(pages):
     ax = new_page(pages, "Corner radius gauge (A4)", [
-        "1. Lay the phone screen-down, one long side on line Y, the bottom edge on line X, pushed snugly into the corner.",
+        "1. Lay the phone screen-down and slide it until its long side touches line Y AND its bottom edge touches line X.",
         "2. Look straight down at the corner. Arcs smaller than the phone's corner show in the gap; bigger ones hide under the phone.",
         "3. The corner radius is between the largest arc you can still see and the next size up. A 0.5 mm error here only moves",
         "    the corner of the case by 0.2 mm. Or take a photo straight down and send it to Claude.",
@@ -181,13 +199,19 @@ def back_template(pages):
 
 
 def main():
+    global printer_scale
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--printer-scale", type=float, default=1.0,
+                        help="measured length of the 100 mm bar divided by 100, for a printer that shrinks pages")
+    printer_scale = parser.parse_args().printer_scale
     OUT.mkdir(exist_ok=True)
     pages = []
     measurement_sheet(pages)
     corner_gauge(pages)
     outline_check(pages)
     back_template(pages)
-    path = OUT / "galaxy_s25plus_print_sheets.pdf"
+    suffix = "" if printer_scale == 1 else f"_for_{printer_scale * 100:.1f}pct_printer"
+    path = OUT / f"galaxy_s25plus_print_sheets{suffix}.pdf"
     with PdfPages(path) as pdf:
         for fig in pages:
             pdf.savefig(fig)

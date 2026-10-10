@@ -1,9 +1,11 @@
 # Galaxy S25+ reference model
 
 A parametric model of the Samsung Galaxy S25+ to design an enclosed case around
-in Shapr3D. All dimensions live in [`params.py`](params.py); only length, width
-and thickness are Samsung's published figures. Everything tagged `GUESS` is a
-placeholder until it's measured on the real phone.
+in Shapr3D. All dimensions live in [`params.py`](params.py), each tagged with
+where it came from: `SPEC` (Samsung's published length, width and thickness),
+`PHOTO` (measured from a photo of the real phone, about ±1 mm), `CALC` (worked
+out from published figures), `GUESS` (placeholder) or `MEAS` (calipers).
+Don't design the final case until the `PHOTO` and `GUESS` values are `MEAS`.
 
 ## Files
 
@@ -26,7 +28,10 @@ Origin is the centre of the phone: +X toward the button side, +Y toward the top,
 ## Measuring
 
 1. Print the PDF at 100% / "Actual size" and check each page's 100 mm bar with
-   the calipers.
+   the calipers. If your printer shrinks the page and has no "Actual size"
+   option (common when printing from a phone), measure the bar and run
+   `python make_print_sheets.py --printer-scale 0.953` (bar length / 100).
+   That writes a separate PDF drawn bigger to make up for the shrink.
 2. Fill in page 1. Every position is from the named edge to the nearest edge
    of the feature, which is what calipers measure directly.
 3. Use page 2 for the corner radius (A4).

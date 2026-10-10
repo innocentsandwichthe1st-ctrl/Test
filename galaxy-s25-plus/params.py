@@ -2,8 +2,10 @@
 
 Each value is tagged:
     SPEC   Samsung's published spec
+    PHOTO  measured from a photo of the real phone, about +/-1 mm
+    CALC   worked out from other published figures
     GUESS  placeholder until it's measured on the real phone
-    MEAS   measured on the real phone
+    MEAS   measured on the real phone with calipers
 
 The IDs (A1, B2, ...) match the measurement sheet, page 1 of
 output/galaxy_s25plus_print_sheets.pdf.
@@ -20,16 +22,18 @@ feature, which is what calipers measure directly. The scripts work out centres.
 LENGTH = 158.4  # A1 SPEC, top to bottom
 WIDTH = 75.8  # A2 SPEC, side to side
 THICKNESS = 7.3  # A3 SPEC, screen to back glass, not counting the cameras
-CORNER_RADIUS = 11.0  # A4 GUESS, seen from the front
+# A leaked CAD dummy gave 158.44 x 75.79 x 7.35, so expect the real phone within ~0.05 mm of the spec.
+CORNER_RADIUS = 9.5  # A4 PHOTO, seen from the front; Samsung's corners are a smooth "squircle", this is the equivalent arc
 SIDE_FLAT_HEIGHT = 5.5  # A5 GUESS, flat strip of the side frame between the rounded edges
 
 # B: rear cameras (top to bottom) and flash
+# Positions and diameters are PHOTO; protrusion is GUESS (published figures disagree: ~1.25 to 1.8).
 CAMERAS = [
-    dict(id="B1", from_top=7.0, from_side=7.5, diameter=12.0, protrusion=1.5),  # GUESS
-    dict(id="B2", from_top=22.0, from_side=7.5, diameter=12.0, protrusion=1.5),  # GUESS
-    dict(id="B3", from_top=37.0, from_side=7.5, diameter=12.0, protrusion=1.5),  # GUESS
+    dict(id="B1", from_top=6.4, from_side=5.9, diameter=15.0, protrusion=1.5),
+    dict(id="B2", from_top=23.3, from_side=5.9, diameter=15.0, protrusion=1.5),
+    dict(id="B3", from_top=40.2, from_side=5.9, diameter=15.0, protrusion=1.5),
 ]
-FLASH = dict(id="B4", from_top=10.5, from_side=24.0, diameter=5.0)  # GUESS
+FLASH = dict(id="B4", from_top=20.0, from_side=25.5, diameter=4.5)  # PHOTO
 
 # C: keys on the button side. from_top is to the top end of the key; height is
 # across the phone's thickness; protrusion is how far the key sticks out.
@@ -52,5 +56,6 @@ TOP_OPENINGS = [
 ]
 
 # F: front, only needed if the case covers the screen
-SCREEN_BORDER = dict(id="F1", sides=2.0, top=2.0, bottom=2.0)  # GUESS, black border around the display
+# CALC from Samsung's 169.1 mm full-rectangle diagonal and 1440 x 3120 pixels: active area ~70.9 x 153.5 mm
+SCREEN_BORDER = dict(id="F1", sides=2.45, top=2.45, bottom=2.45)  # CALC, body edge to the first lit pixel
 SELFIE_CAMERA = dict(id="F2", from_top=5.0, diameter=3.6)  # GUESS, centred side to side
