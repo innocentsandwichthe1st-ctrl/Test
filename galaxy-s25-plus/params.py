@@ -23,11 +23,12 @@ LENGTH = 158.4  # A1 SPEC, top to bottom
 WIDTH = 75.8  # A2 SPEC, side to side
 THICKNESS = 7.3  # A3 SPEC, screen to back glass, not counting the cameras
 # A leaked CAD dummy gave 158.44 x 75.79 x 7.35, so expect the real phone within ~0.05 mm of the spec.
-CORNER_RADIUS = 9.5  # A4 PHOTO, seen from the front; Samsung's corners are a smooth "squircle", this is the equivalent arc
+CORNER_RADIUS = 9.3  # A4 PHOTO, seen from the front; Samsung's corners are a smooth "squircle", this is the equivalent arc
 SIDE_FLAT_HEIGHT = 5.5  # A5 GUESS, flat strip of the side frame between the rounded edges
 
 # B: rear cameras (top to bottom) and flash
-# Positions and diameters are PHOTO; protrusion is GUESS (published figures disagree: ~1.25 to 1.8).
+# Positions and diameters are PHOTO. Protrusion is GUESS: published figures disagree
+# (~1.25 mm from PhoneArena's "~8.55 mm with camera", 1.8 mm leaked for the base S25).
 CAMERAS = [
     dict(id="B1", from_top=6.4, from_side=5.9, diameter=15.0, protrusion=1.5),
     dict(id="B2", from_top=23.3, from_side=5.9, diameter=15.0, protrusion=1.5),
@@ -56,6 +57,7 @@ TOP_OPENINGS = [
 ]
 
 # F: front, only needed if the case covers the screen
-# CALC from Samsung's 169.1 mm full-rectangle diagonal and 1440 x 3120 pixels: active area ~70.9 x 153.5 mm
-SCREEN_BORDER = dict(id="F1", sides=2.45, top=2.45, bottom=2.45)  # CALC, body edge to the first lit pixel
+# CALC from Samsung's 169.1 mm full-rectangle diagonal and 1440 x 3120 pixels: active area 70.86 x 153.54 mm.
+# Measured from the body edge to the first lit pixel; the top/bottom split of the 4.86 mm total is assumed even.
+SCREEN_BORDER = dict(id="F1", sides=2.47, top=2.43, bottom=2.43)  # CALC
 SELFIE_CAMERA = dict(id="F2", from_top=5.0, diameter=3.6)  # GUESS, centred side to side
