@@ -59,8 +59,9 @@ SHEET = [
         ("D4", "SIM tray (note if it's on the top)", ["btn side → tray", "length", "height"]),
     ]),
     ("Top edge and other side", [
-        ("E1", "Microphone hole", ["btn side → hole", "Ø"]),
-        ("E2", "Anything else on the top edge?", ["notes"]),
+        ("E1", "Top hole nearer the button side", ["btn side → hole", "Ø"]),
+        ("E2", "Other top hole", ["btn side → hole", "Ø"]),
+        ("E3", "Anything else on the top edge?", ["notes"]),
         ("G1", "Anything on the long side without keys?", ["notes"]),
     ]),
     ("Front (only if the case covers the screen)", [
@@ -132,7 +133,7 @@ def measurement_sheet(pages):
                 x0 = 112 + i * 23.5
                 ax.plot([x0, x0 + width - 3], [y - 1.5, y - 1.5], color="0.4", lw=0.5)
                 ax.text(x0, y - 3.2, field, fontsize=5.5, color="0.35", va="top")
-            y -= 9
+            y -= 8.3
         y -= 2
 
 
@@ -190,9 +191,11 @@ def back_template(pages):
         ax.plot(x + d / 2 * np.cos(t), y + d / 2 * np.sin(t), color="k", lw=LINE)
         ax.text(x, y, item["id"], fontsize=6, ha="center", va="center")
     for k in p.KEYS:
-        y1 = top - k["from_top"]
-        ax.fill([left - 3, left, left, left - 3], [y1, y1, y1 - k["length"], y1 - k["length"]], color="0.75", lw=0)
-        ax.text(left - 4, y1 - k["length"] / 2, k["id"], fontsize=6, ha="right", va="center")
+        # the key folded out beside the edge: its length along the edge, its height across
+        y_mid = top - k["from_top"] - k["length"] / 2
+        h = k["height"]
+        ax.fill(*rounded_rect(left - 0.5 - h / 2, y_mid, h, k["length"], h / 2), color="0.75", lw=0)
+        ax.text(left - 1.5 - h, y_mid, k["id"], fontsize=6, ha="right", va="center")
     ax.text(left - 4, cy - 40, "button\nside", fontsize=7, ha="right", va="center", color="0.4")
     ax.text(cx, top + 3, "top", fontsize=7, ha="center", color="0.4")
     scale_bar(ax)

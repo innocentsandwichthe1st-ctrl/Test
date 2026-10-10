@@ -69,14 +69,15 @@ def camera_ring(cam):
 
 
 def key(k):
-    depth = k["protrusion"] + OVERLAP
+    """Pill-shaped key: rounded ends seen from the side, softened outer edge."""
+    origin = (W / 2 - OVERLAP, y_center(k["from_top"], k["length"]), z_center(k))
     return (
-        cq.Workplane("XY")
-        .box(depth, k["length"], k["height"])
+        cq.Workplane(cq.Plane(origin, (0, 1, 0), (1, 0, 0)))
+        .slot2D(k["length"], k["height"])
+        .extrude(k["protrusion"] + OVERLAP)
         .faces(">X")
         .edges()
-        .fillet(min(k["protrusion"], k["height"] / 2) * 0.8)
-        .translate((W / 2 - OVERLAP + depth / 2, y_center(k["from_top"], k["length"]), z_center(k)))
+        .fillet(min(0.3, k["protrusion"] / 2))
     )
 
 

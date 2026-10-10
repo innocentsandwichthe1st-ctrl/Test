@@ -14,6 +14,7 @@ Don't design the final case until the `PHOTO` and `GUESS` values are `MEAS`.
 | `output/galaxy_s25plus.step` | Phone body plus feature markers. Import this into Shapr3D. |
 | `output/galaxy_s25plus_body.stl` | Phone body only, for a quick test print. |
 | `output/galaxy_s25plus_print_sheets.pdf` | Measurement sheet, corner gauge and 1:1 check templates. |
+| `output/galaxy_s25plus_print_sheets_for_94.8pct_printer.pdf` | The same sheets drawn bigger for a printer that shrinks pages to 94.82%. |
 
 In the STEP file, `phone_body` is the outer shape the case has to fit around:
 the slab, camera rings and keys. Ports, mics, the flash, the SIM tray, the

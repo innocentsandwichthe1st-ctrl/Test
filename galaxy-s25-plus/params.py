@@ -30,14 +30,14 @@ SIDE_FLAT_HEIGHT = 5.5  # A5 GUESS, flat strip of the side frame between the rou
 # Positions and diameters are PHOTO. Protrusion is GUESS: published figures disagree
 # (~1.25 mm from PhoneArena's "~8.55 mm with camera", 1.8 mm leaked for the base S25).
 CAMERAS = [
-    dict(id="B1", from_top=6.4, from_side=5.9, diameter=15.0, protrusion=1.5),
-    dict(id="B2", from_top=23.3, from_side=5.9, diameter=15.0, protrusion=1.5),
-    dict(id="B3", from_top=40.2, from_side=5.9, diameter=15.0, protrusion=1.5),
+    dict(id="B1", from_top=6.6, from_side=6.0, diameter=15.0, protrusion=1.5),
+    dict(id="B2", from_top=23.4, from_side=6.0, diameter=15.0, protrusion=1.5),
+    dict(id="B3", from_top=40.2, from_side=6.0, diameter=15.0, protrusion=1.5),
 ]
-FLASH = dict(id="B4", from_top=20.0, from_side=25.5, diameter=4.5)  # PHOTO
+FLASH = dict(id="B4", from_top=20.2, from_side=25.5, diameter=4.5)  # PHOTO
 
-# C: keys on the button side. from_top is to the top end of the key; height is
-# across the phone's thickness; protrusion is how far the key sticks out.
+# C: pill-shaped keys on the button side. from_top is to the top end of the key;
+# height is across the phone's thickness; protrusion is how far the key sticks out.
 KEYS = [
     dict(id="C1", name="volume", from_top=37.0, length=22.0, height=2.4, protrusion=0.6),  # GUESS
     dict(id="C2", name="power", from_top=64.0, length=12.0, height=2.4, protrusion=0.6),  # GUESS
@@ -52,8 +52,9 @@ BOTTOM_OPENINGS = [
     dict(id="D3", name="mic", from_side=45.5, width=1.0, height=1.0),  # GUESS
     dict(id="D4", name="sim_tray", from_side=52.0, width=16.0, height=2.6),  # GUESS
 ]
-TOP_OPENINGS = [
-    dict(id="E1", name="mic", from_side=50.0, width=1.0, height=1.0),  # GUESS
+TOP_OPENINGS = [  # two holes on the top edge
+    dict(id="E1", name="hole_1", from_side=30.0, width=1.0, height=1.0),  # GUESS
+    dict(id="E2", name="hole_2", from_side=50.0, width=1.0, height=1.0),  # GUESS
 ]
 
 # F: front, only needed if the case covers the screen
